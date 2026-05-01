@@ -1,0 +1,481 @@
+/* =========================================
+   VARIABLES GLOBALES
+   ========================================= */
+:root {
+    --gold: #cca352;
+    --gold-light: #eadd9a;
+    --navy-dark: #0a1024;
+    --navy-light: #1c3c75;
+    --white: #ffffff;
+    --font-serif: 'Playfair Display', serif;
+    --font-script: 'Pinyon Script', cursive;
+    --font-sans: 'Montserrat', sans-serif;
+    --font-parisienne: 'Parisienne', cursive;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Smooth Scroll Global para la página */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: radial-gradient(circle at center 30%, var(--navy-light) 0%, var(--navy-dark) 80%);
+    display: flex;
+    justify-content: center;
+    font-family: var(--font-sans);
+    min-height: 100vh;
+}
+
+/* =========================================
+   ANIMACIONES GLOBALES
+   ========================================= */
+@keyframes pageSmoothEntry {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInStar {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes twinkleSmoothWobble {
+    0% { transform: scale(0.7) rotate(0deg); opacity: 0.1; }
+    50% { transform: scale(0.9) rotate(2deg); opacity: 0.3; }
+    100% { transform: scale(1.1) rotate(-2deg); opacity: 0.5; }
+}
+
+/* =========================================
+   ESTRUCTURA PRINCIPAL
+   ========================================= */
+.mobile-wrapper {
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    overflow-x: hidden;
+    color: var(--white);
+    text-align: center;
+    opacity: 0; 
+    animation: pageSmoothEntry 1.5s ease-in-out forwards;
+    background: transparent; 
+}
+
+/* =========================================
+   FONDO DE ESTRELLAS SUAVES
+   ========================================= */
+#stars-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(0.5px); 
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+}
+
+.star {
+    position: absolute;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: -1; 
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.5); 
+    opacity: 0; 
+animation: fadeInStar 2s ease-out both, 
+               twinkleSmoothWobble 6s infinite alternate ease-in-out;
+}
+/* =========================================
+   REVEAL & ANIMACIONES DE ENTRADA (Usando Translate)
+   ========================================= */
+.reveal {
+    opacity: 0;
+    translate: 0 40px; 
+    transition: opacity 1s ease-out, translate 1s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    translate: 0 0;
+}
+
+/* Animación de los arcos blancos */
+.parallax-up {
+    opacity: 0;
+    translate: 0 120px;
+    transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), translate 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.parallax-up.active {
+    opacity: 1;
+    translate: 0 0;
+}
+
+/* Animación de la fecha */
+.parallax-date-entry {
+    opacity: 0;
+    transform: scale(0.9);
+    translate: 0 60px;
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                translate 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.parallax-date-entry.active {
+    opacity: 1;
+    transform: scale(1);
+    translate: 0 0;
+}
+
+/* Animación de los adornos de las esquinas */
+.parallax-ornament {
+    opacity: 0;
+    translate: 0 -20px;
+    transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), translate 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.parallax-ornament.active {
+    opacity: 1;
+    translate: 0 0;
+}
+
+.delay-1.active { transition-delay: 0.2s; }
+.delay-2.active { transition-delay: 0.4s; }
+.delay-3.active { transition-delay: 0.6s; }
+
+/* =========================================
+   PARALLAX SCROLL JS (Optimización)
+   ========================================= */
+.parallax-item {
+    will-change: transform;
+}
+
+/* =========================================
+   ADORNOS DE ESQUINA (Imágenes Independientes)
+   ========================================= */
+.floral-adorn {
+    position: absolute;
+    top: -10px;
+    width: 100%;
+    max-width: 500px;
+    height: 350px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 2;
+    /* No hay transición en transform para no chocar con el JS del Parallax */
+}
+
+.top-left-ornament { 
+    left: -10px; 
+    top: -30px;
+    height: 500px;
+    background-position: top left; 
+    background-image: url('imgs/adorno-1.webp'); /* Tu imagen izquierda */
+}
+
+.top-right-ornament { 
+    right: -10px; 
+    top: -30px;
+    height: 500px;
+    background-position: top right; 
+    background-image: url('imgs/adorno-right.webp'); /* Tu imagen derecha */
+}
+
+/* =========================================
+   TEXTOS Y HERO
+   ========================================= */
+.content-layer {
+    position: relative;
+    z-index: 10; 
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: auto; 
+}
+
+.tiara-icon {
+    width: 230px;
+    height: auto;
+    margin-bottom: -25px;
+    position: relative;
+    z-index: 4;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.fifteen-block {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 180px;
+}
+
+.number-15 {
+    font-family: var(--font-sans);
+    font-size: 11rem;
+    font-weight: 700;
+    background: linear-gradient(to bottom, #f3e5ab, #b88a44);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cursive-overlay {
+    position: absolute;
+    font-family: var(--font-script);
+    font-size: 5.2rem;
+    color: var(--white);
+    transform: rotate(-10deg) translateY(10px);
+}
+
+.main-name {
+    font-family: var(--font-sans);
+    font-size: 2.5rem;
+    font-weight: 700; 
+    color: var(--gold);
+    letter-spacing: 6px;
+    margin: 20px 0 10px 0;
+}
+
+.special-quote {
+    font-family: var(--font-parisienne);
+    font-size: 1.6rem; 
+    color: var(--white);
+    line-height: 1.5;
+    width: 85%;           
+    max-width: 400px;
+        margin: 30px auto 60px auto; 
+    opacity: 0.9;
+    text-align: center;
+    font-weight: 400;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* =========================================
+   BLOQUE DE FECHA (Estilo Editorial)
+   ========================================= */
+.date-block {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 60px auto; /* Eliminamos margen superior */
+    padding: 0 10px;
+}
+
+.date-framed-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px; 
+}
+
+/* Bloque Central */
+.framed-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-left: 1px solid var(--gold);
+    border-right: 1px solid var(--gold);
+    padding: 0 15px; 
+}
+
+.framed-small {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    color: var(--white); 
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 0;
+}
+
+.framed-number {
+    font-family: var(--font-serif);
+    font-size: 4.5rem;
+    color: var(--gold);
+    font-weight: 700;
+    line-height: 0.7; 
+    margin-top: -12px;   
+    margin-bottom: 12px;  
+}
+
+/* Bloques Laterales */
+.framed-side {
+    display: flex;
+    align-items: center;
+}
+
+.framed-side-text {
+    font-family: var(--font-sans);
+    font-size: 0.85rem; 
+    letter-spacing: 2px;
+    color: var(--white);
+    text-transform: uppercase;
+    border-top: 1px solid var(--gold);
+    border-bottom: 1px solid var(--gold);
+    padding: 10px 5px; 
+    text-align: center;
+    white-space: nowrap; 
+}
+
+/* Efecto Glow Dorado */
+.golden-glow .framed-number {
+    text-shadow: 0 0 15px rgba(204, 163, 82, 0.8), 
+                 0 0 25px rgba(204, 163, 82, 0.5),
+                 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.golden-glow .framed-small, 
+.golden-glow .framed-side-text {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4),
+                 0 0 12px rgba(204, 163, 82, 0.6);
+}
+
+.golden-glow .framed-center, 
+.golden-glow .framed-side-text {
+    box-shadow: 0 0 20px rgba(204, 163, 82, 0.4);
+}
+
+/* =========================================
+   ZONA DE ARCOS BLANCOS Y EVENTOS
+   ========================================= */
+.arches-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 5;
+    margin-top: 0;
+    /* La máscara oscura fue eliminada para evitar la mancha negra */
+}
+
+.white-arch {
+    background-color: var(--white);
+    width: 100%;
+    padding: 50px 20px 40px 20px;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.white-arch:first-child {
+    border-radius: 60% 60% 0 0 / 100px 100px 0 0;
+    /* Sombras eliminadas para un borde limpio */
+    box-shadow: none; 
+    border-top: 1px solid rgba(204, 163, 82, 0.3); /* Línea dorada sutil */
+    margin-top: 0;
+}
+
+.arch-secondary {
+    padding-top: 20px;
+}
+
+/* =========================================
+   SECCIÓN DE PADRES Y MADRINA
+   ========================================= */
+.family-section {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 30px;
+    padding-top: 10px;
+}
+
+.family-cursive {
+    font-family: var(--font-parisienne);
+    font-size: 2.2rem;
+    color: #444; 
+    margin-bottom: 25px;
+}
+
+.family-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.family-names {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    color: #222;
+    line-height: 1.4;
+    margin-bottom: 25px;
+}
+
+.godparent-block { margin-top: 10px; }
+
+.gold-divider {
+    width: 50px;
+    height: 1px;
+    background-color: var(--gold);
+    margin: 0 auto 35px auto;
+    opacity: 0.6;
+}
+
+/* =========================================
+   ICONOS Y BOTONES
+   ========================================= */
+.arch-icon {
+    font-size: 3.5rem;
+    color: var(--gold);
+    margin-bottom: 15px;
+}
+
+.arch-title {
+    font-family: var(--font-script);
+    font-size: 2.2rem;
+}
+
+.arch-time { font-weight: 600; margin: 10px 0; }
+
+.btn-gold {
+    background-color: var(--gold);
+    color: #fff;
+    padding: 12px 40px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.rsvp-container {
+    background-color: #fff;
+    width: 100%;
+    padding: 20px 20px 60px 20px;
+}
+
+.cursive-intro { font-family: var(--font-script); font-size: 2rem; margin-bottom: 15px; }
+
+.btn-whatsapp {
+    display: inline-block;
+    background-color: #25D366;
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* MEDIA QUERIES (Para pantallas grandes/PC) */
+@media (min-width: 768px) {
+    .top-left-ornament, .top-right-ornament { width: 380px; height: 380px; }
+    .tiara-icon { width: 190px; margin-bottom: -40px; }
+    .arches-wrapper { flex-direction: row; justify-content: center; gap: 20px; padding: 0 40px; max-width: 1000px; }
+    .white-arch:first-child, .arch-secondary { margin-top: 40px; border-radius: 100px 100px 0 0; border-top: none;}
+    .rsvp-container { max-width: 1000px; margin: 0 auto; border-radius: 0 0 20px 20px; }
+}
