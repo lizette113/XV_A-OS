@@ -51,6 +51,16 @@ body {
     100% { transform: scale(1.1) rotate(-2deg); opacity: 0.5; }
 }
 
+@keyframes glowPulse {
+    0%, 100% { filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35)); }
+    50% { filter: drop-shadow(0 10px 18px rgba(204, 163, 82, 0.35)); }
+}
+
+@keyframes shimmerText {
+    0%, 100% { opacity: 0.9; }
+    50% { opacity: 1; }
+}
+
 /* =========================================
    ESTRUCTURA PRINCIPAL
    ========================================= */
@@ -79,6 +89,17 @@ body {
     mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
 }
 
+#start-screen-stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    filter: blur(0.5px);
+    z-index: 0;
+}
+
 .star {
     position: absolute;
     color: var(--white);
@@ -97,53 +118,61 @@ animation: fadeInStar 2s ease-out both,
    ========================================= */
 .reveal {
     opacity: 0;
-    translate: 0 40px; 
-    transition: opacity 1s ease-out, translate 1s ease-out;
+    transform: translateY(40px) scale(0.98);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+    will-change: opacity, transform;
 }
 
 .reveal.active {
     opacity: 1;
-    translate: 0 0;
+    transform: translateY(0) scale(1);
 }
 
 /* Animación de los arcos blancos */
 .parallax-up {
     opacity: 0;
-    translate: 0 120px;
-    transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), translate 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(120px) scale(0.98);
+    transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
 }
 
 .parallax-up.active {
     opacity: 1;
-    translate: 0 0;
+    transform: translateY(0) scale(1);
 }
 
 /* Animación de la fecha */
 .parallax-date-entry {
     opacity: 0;
-    transform: scale(0.9);
-    translate: 0 60px;
-    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
-                translate 1.2s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(60px) scale(0.9);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
 }
 
 .parallax-date-entry.active {
     opacity: 1;
-    transform: scale(1);
-    translate: 0 0;
+    transform: translateY(0) scale(1);
 }
 
 /* Animación de los adornos de las esquinas */
 .parallax-ornament {
     opacity: 0;
-    translate: 0 -20px;
-    transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), translate 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(-20px);
+    transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .parallax-ornament.active {
     opacity: 1;
-    translate: 0 0;
+    transform: translateY(0);
+}
+
+.scroll-right {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}
+
+.scroll-right.active {
+    opacity: 1;
 }
 
 .delay-1.active { transition-delay: 0.2s; }
@@ -179,6 +208,7 @@ animation: fadeInStar 2s ease-out both,
     height: 500px;
     background-position: top left; 
     background-image: url('imgs/adorno-1.webp'); /* Tu imagen izquierda */
+    animation: glowPulse 12s ease-in-out infinite;
 }
 
 .top-right-ornament { 
@@ -187,6 +217,7 @@ animation: fadeInStar 2s ease-out both,
     height: 500px;
     background-position: top right; 
     background-image: url('imgs/adorno-right.webp'); /* Tu imagen derecha */
+    animation: glowPulse 12s ease-in-out infinite;
 }
 
 /* =========================================
@@ -209,6 +240,7 @@ animation: fadeInStar 2s ease-out both,
     position: relative;
     z-index: 4;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+    animation: glowPulse 10s ease-in-out infinite;
 }
 
 .fifteen-block {
@@ -355,8 +387,8 @@ animation: fadeInStar 2s ease-out both,
     align-items: center;
     position: relative;
     z-index: 5;
-    margin-top: 0;
-    /* La máscara oscura fue eliminada para evitar la mancha negra */
+    margin-top: 0;    /* La máscara oscura fue eliminada para evitar la mancha negra */
+
 }
 
 .white-arch {
@@ -379,6 +411,7 @@ animation: fadeInStar 2s ease-out both,
 
 .arch-secondary {
     padding-top: 20px;
+    margin-top: -15px;
 }
 
 /* =========================================
@@ -397,8 +430,37 @@ animation: fadeInStar 2s ease-out both,
     color: #444; 
     margin-bottom: 25px;
 }
+/* comentario 
+.family-cursiveeee {
+    font-family: var(--font-parisienne);
+    font-size: 2.2rem;
+    color: #444;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+*/
 
 .family-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.family-labels {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.family-label1 {
     display: block;
     font-family: var(--font-sans);
     font-size: 0.85rem;
@@ -436,12 +498,17 @@ animation: fadeInStar 2s ease-out both,
     margin-bottom: 15px;
 }
 
-.arch-title {
+.arch-title,
+.arch-titleeee {
     font-family: var(--font-script);
     font-size: 2.2rem;
+    margin-bottom: 25px;
 }
 
-.arch-time { font-weight: 600; margin: 10px 0; }
+.arch-time {
+    font-weight: 600;
+    margin: 10px 0;
+}
 
 .btn-gold {
     background-color: var(--gold);
@@ -457,9 +524,19 @@ animation: fadeInStar 2s ease-out both,
     background-color: #fff;
     width: 100%;
     padding: 20px 20px 60px 20px;
+     margin-top: -16px; /*ajusta si es necesario */
+
 }
 
 .cursive-intro { font-family: var(--font-script); font-size: 2rem; margin-bottom: 15px; }
+
+.rsvp-message {
+    font-family: var(--font-parisienne);
+    font-size: 1.5rem;
+    color: #444;
+    margin: 15px 20px 25px 20px;
+    text-align: center;
+}
 
 .btn-whatsapp {
     display: inline-block;
@@ -471,11 +548,143 @@ animation: fadeInStar 2s ease-out both,
     font-weight: 600;
 }
 
+/* =========================================
+   CONTADOR DE TIEMPO
+   ========================================= */
+.countdown-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 40px auto 60px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+        margin-top: 10px;
+
+}
+
+.countdown-frame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border: 2px solid var(--gold);
+    border-radius: 20px;
+    padding: 30px 20px;
+    background: rgba(12, 19, 43, 0.5);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(204, 163, 82, 0.2);
+    flex-wrap: wrap;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 70px;
+}
+
+.countdown-number {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(204, 163, 82, 0.6);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+}
+
+.countdown-label {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--white);
+    text-transform: uppercase;
+    opacity: 0.8;
+    font-weight: 600;
+}
+
+.countdown-separator {
+    font-size: 1.8rem;
+    color: var(--gold);
+    margin: 0 4px;
+    opacity: 0.6;
+    line-height: 1;
+}
+
+/* Responsive para celular */
+@media (max-width: 767px) {
+    .countdown-number { font-size: 1.8rem; }
+    .countdown-label { font-size: 0.6rem; }
+    .countdown-separator { font-size: 1.2rem; }
+    .countdown-item { min-width: 50px; }
+    .countdown-frame { padding: 20px 10px; gap: 4px; }
+    .arch-secondary { margin-top: -15px; }
+}
+
 /* MEDIA QUERIES (Para pantallas grandes/PC) */
 @media (min-width: 768px) {
     .top-left-ornament, .top-right-ornament { width: 380px; height: 380px; }
     .tiara-icon { width: 190px; margin-bottom: -40px; }
-    .arches-wrapper { flex-direction: row; justify-content: center; gap: 20px; padding: 0 40px; max-width: 1000px; }
-    .white-arch:first-child, .arch-secondary { margin-top: 40px; border-radius: 100px 100px 0 0; border-top: none;}
-    .rsvp-container { max-width: 1000px; margin: 0 auto; border-radius: 0 0 20px 20px; }
+    .arches-wrapper { flex-direction: column; justify-content: center; gap: 0; padding: 0; max-width: 100%; margin: 0; }
+    .white-arch { width: 100%; margin: 0; }
+    .white-arch:first-child { margin: 0; border-radius: 60% 60% 0 0 / 100px 100px 0 0; border-top: 1px solid rgba(204, 163, 82, 0.3); }
+    .arch-secondary { margin: -12px 0 0 0; padding-top: 28px; border-radius: 0; border-top: none; }
+    .rsvp-container { width: 100%; margin: 0; border-radius: 0 0 20px 20px; }
+    .countdown-container { margin: 60px auto 0 auto; max-width: 900px; width: 100%; }
 }
+
+/* =========================================
+   PANTALLA INICIAL (MÚSICA)
+   ========================================= */
+#start-screen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #0a1024;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#start-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.start-btn {
+    padding: 20px 40px;
+    font-size: 1.5rem;
+    background: #cca352;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+.countdown-title {
+    font-family: var(--font-script);
+    font-size: 2.6rem;
+    text-align: center;
+    margin-top: 40px;
+    /* ejemplo de dorado margin-bottom: 22px;*/
+    letter-spacing: 2px;
+    color: #f0eaea;
+        margin-bottom: 5px;
+            margin: 30px auto 8px auto; /* centra horizontalmente */
+
+
+}
+
+.date-block {
+    margin: 0 auto 70px auto;
+} 

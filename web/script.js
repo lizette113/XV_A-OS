@@ -1,37 +1,42 @@
 document.addEventListener("DOMContentLoaded", function() {
     
     // =========================================
-    // 1. GENERACIÓN DE ESTRELLAS DE FONDO
+    // 1. FUNCIÓN PARA GENERAR ESTRELLAS
     // =========================================
-    const container = document.getElementById('stars-bg');
-    const shapes = ['✦', '✧', '★', '✶'];
-    const totalStars = 150; // Cantidad ideal para no saturar
-    const fragment = document.createDocumentFragment();
+    function createStars(containerId, totalStars = 150) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
+        const shapes = ['✦', '✧', '★', '✶'];
+        const fragment = document.createDocumentFragment();
 
-    for (let i = 0; i < totalStars; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+        for (let i = 0; i < totalStars; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+            
+            // Posicionamiento libre por toda la pantalla
+            star.style.left = Math.random() * 98 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            
+            // Tamaños sutiles para no competir con el texto
+            const size = (Math.random() * 10 + 4); 
+            star.style.fontSize = size + 'px';
+            
+            // Retraso aleatorio para un efecto de parpadeo natural
+            star.style.animationDelay = (Math.random() * 2) + 's';
+            
+            // Agregamos al fragmento para optimizar el rendimiento
+            fragment.appendChild(star);
+        }
         
-        // Posicionamiento libre por toda la pantalla
-        star.style.left = Math.random() * 98 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        
-        // Tamaños sutiles para no competir con el texto
-        const size = (Math.random() * 10 + 4); 
-        star.style.fontSize = size + 'px';
-        
-        // Retraso aleatorio para un efecto de parpadeo natural
-        star.style.animationDelay = (Math.random() * 2) + 's';
-        
-        // Agregamos al fragmento para optimizar el rendimiento
-        fragment.appendChild(star);
-    }
-    
-    // Inyectamos todas las estrellas de una sola vez
-    if (container) {
+        // Inyectamos todas las estrellas de una sola vez
         container.appendChild(fragment);
     }
+    
+    // Generar estrellas en ambos lugares
+    createStars('stars-bg', 150);
+    createStars('start-screen-stars', 120);
 
     // =========================================
     // 2. PARALLAX FLUIDO (Scroll)
@@ -95,3 +100,63 @@ document.addEventListener("DOMContentLoaded", function() {
         observer.observe(el);
     });
 });
+function startExperience() {
+    document.getElementById("start-screen").style.display = "none";
+
+    const audio = document.getElementById("music");
+    audio.volume = 0;
+
+    audio.play();
+
+    let vol = 0;
+    const fade = setInterval(() => {
+        if (vol < 0.5) {
+            vol += 0.05;
+            audio.volume = vol;
+        } else {
+            clearInterval(fade);
+        }
+    }, 200);
+
+    // Iniciar contador de tiempo
+    startCountdown();
+}
+
+// =========================================
+// FUNCIÓN DEL CONTADOR DE TIEMPO
+// =========================================
+function startCountdown() {
+    // Fecha del evento: 20 de junio de 2026
+    const eventDate = new Date('2026-06-20T18:00:00').getTime();
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = eventDate - now;
+
+        // Calcular días, horas, minutos, segundos
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Actualizar elementos
+        document.getElementById('days').textContent = String(days).padStart(2, '0');
+        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+
+        // Si el evento ya pasó
+        if (distance < 0) {
+            document.getElementById('days').textContent = '00';
+            document.getElementById('hours').textContent = '00';
+            document.getElementById('minutes').textContent = '00';
+            document.getElementById('seconds').textContent = '00';
+        }
+    }
+
+    // Actualizar inmediatamente
+    updateCountdown();
+
+    // Actualizar cada segundo
+    setInterval(updateCountdown, 1000);
+}

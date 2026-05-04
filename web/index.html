@@ -12,6 +12,25 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
+
+<div id="start-screen">
+    <div id="start-screen-stars"></div>
+    <button onclick="startExperience()" class="start-btn">
+        ✨ Abrir invitación ✨
+    </button>
+</div>
+
+
+<iframe 
+    id="musicPlayer"
+    width="0"
+    height="0"
+    src=""
+    frameborder="0"
+    allow="autoplay; encrypted-media"
+    allowfullscreen>
+</iframe>
+
 <body>
 
     <div class="mobile-wrapper">
@@ -56,15 +75,41 @@
                 </div>
             </div>
 
+            <!-- CONTADOR DE TIEMPO -->
+             <p class="countdown-title">Faltan</p>
+
+            <div class="countdown-container reveal delay-1 parallax-item" data-speed="0.08">
+                <div class="countdown-frame">
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="days">00</div>
+                        <div class="countdown-label">DÍAS</div>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="hours">00</div>
+                        <div class="countdown-label">HORAS</div>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="minutes">00</div>
+                        <div class="countdown-label">MINUTOS</div>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="seconds">00</div>
+                        <div class="countdown-label">SEGUNDOS</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="arches-wrapper">
 
-            <div class="white-arch reveal parallax-up">
+            <div class="white-arch reveal parallax-up parallax-item" data-speed="0.02">
 
-                <div class="family-section">
+                <div class="family-section reveal parallax-item" data-speed="0.04">
                     <p class="family-cursive">En compañía de...</p>
-
                     <div class="parents-block">
                         <span class="family-label">MIS PADRES</span>
                         <span class="family-names">Feliciana Granados Rodríguez<br>Vicente Bautista Lara</span>
@@ -77,29 +122,46 @@
                 </div>
 
                 <div class="gold-divider"></div>
-
+                <p class="family-labels">CEREMONIA RELIGIOSA</p>
                 <i class="fa-solid fa-church arch-icon"></i>
-                <h2 class="arch-title">Parroquia de San Francisco</h2>
-                <p class="arch-time">A LAS 16:00 HRS</p>
-                <a href="#" class="btn-gold">MAPA</a>
-            </div>
-            <div class="white-arch arch-secondary reveal parallax-up delay-1">
-                <i class="fa-solid fa-champagne-glasses arch-icon"></i>
-                <h2 class="arch-title">Salón de Eventos Elegance</h2>
-                <p class="arch-time">A LAS 18:00 HRS</p>
-                <a href="#" class="btn-gold">MAPA</a>
-            </div>
-
-            <div class="rsvp-container reveal">
-                <p class="cursive-intro dark-text">¡No faltes!</p>
-                <a href="https://wa.me/521XXXXXXXXXX" class="btn-whatsapp">
-                    <i class="fa-brands fa-whatsapp"></i> Confirmar Asistencia
+                    <h2 class="arch-title">Parroquia La Divina Providencia</h2>
+                   <p class="arch-time">A LAS 18:00 HRS</p>
+               <a href="https://maps.app.goo.gl/1twv55DP25MtWYiD6?g_st=iw" 
+                    class="btn-gold" 
+                    target="_blank">
+                     MAPA
                 </a>
             </div>
+            <div class="white-arch arch-secondary reveal parallax-up parallax-item delay-1" data-speed="0.02">
+                <p class="family-label">RECEPCIÓN</p>
+                <i class="fa-solid fa-champagne-glasses arch-icon"></i>
+                <h2 class="arch-title">Salón Macros Ejecutivo</h2>
+                <p class="arch-time">A LAS 19:00 HRS</p>
+            <a href="https://maps.app.goo.gl/t9Cq8pMXLjVJ4evY8?g_st=iw" 
+                class="btn-gold" 
+                target="_blank">
+                MAPA
+            </a> 
+            
+         </div>
+          
+            <div class="rsvp-container reveal parallax-item" data-speed="0.03">
+                <p class="rsvp-message">
+                Tu presencia será el mejor regalo.<br>
+                Espero contar con tu compañía en este día inolvidable.
+            </p>
+            <a href="https://wa.me/5630114830" class="btn-whatsapp" target="_blank">
+                <i class="fa-brands fa-whatsapp"></i> Confirmar Asistencia</a>
+            </div>
+
         </div>
-    </div>
+    </div> 
 
     <script src="script.js"></script>
+
+    <audio id="music" loop>
+    <source src="../music.mp3.mp3" type="audio/mpeg">
+    </audio>
 </body>
 
 </html>
