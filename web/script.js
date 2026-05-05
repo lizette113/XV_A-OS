@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     
     // Generar estrellas en ambos lugares
-    createStars('stars-bg', 150);
-    createStars('start-screen-stars', 120);
+    createStars('stars-bg', 80);
+    createStars('start-screen-stars', 60);
 
     // =========================================
     // 2. PARALLAX FLUIDO (Scroll)
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
             ticking = true;
         }
-    });
+    }, { passive: true });
 
     function updateParallax() {
         // Leemos la velocidad de cada elemento y aplicamos el desfase
@@ -65,14 +65,14 @@ document.addEventListener("DOMContentLoaded", function() {
             const speed = item.getAttribute('data-speed') || 0.1;
             const yPos = scrollY * speed;
             
-            // Excepción para el bloque de fecha: necesita mantener su escala de la animación de entrada
+            // Usar translate3d para GPU acceleration
             if(item.classList.contains('parallax-date-entry') && !item.classList.contains('active')) {
-                item.style.transform = `translateY(${yPos}px) scale(0.9)`;
+                item.style.transform = `translate3d(0, ${yPos}px, 0) scale(0.9)`;
             } else if (item.classList.contains('parallax-date-entry') && item.classList.contains('active')) {
-                item.style.transform = `translateY(${yPos}px) scale(1)`;
+                item.style.transform = `translate3d(0, ${yPos}px, 0) scale(1)`;
             } else {
-                // Para todos los demás elementos parallax (tiara, textos, adornos)
-                item.style.transform = `translateY(${yPos}px)`;
+                // GPU acceleration para todos los elementos parallax
+                item.style.transform = `translate3d(0, ${yPos}px, 0)`;
             }
         });
     }
